@@ -16,7 +16,7 @@ public class UnknowPacket implements Packet {
     }
 
     public void write(NetOutput out) throws IOException {
-        
+
     }
 
 }
