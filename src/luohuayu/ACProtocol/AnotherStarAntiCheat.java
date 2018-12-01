@@ -36,7 +36,6 @@ public class AnotherStarAntiCheat {
         serverPrivateKey = new RSAPrivateKeySpec(new BigInteger("90582577094276665384804297579612222028352858965734430918359338883687022181407192388552108083469539909657977600363535513080606600149709934508846296230201104157618580827253874746853403252876192365582460562549171049457092849469390003409874701599243754874843344932806030539695092275477654361631673011953560268683"), new BigInteger("53164759264710803577009892219658881552719726568457129335714054200848700859176154770979093297384009836046723353189547789960564763030938136180825682965266715437551259363202056897867941846985027308929393795178680964219322204389989883292612698672592212090988584189302073745814770265916444742576632864448430325233"));
 
         try {
-            ;
             (clientPublicCipher = Cipher.getInstance("RSA")).init(1, KeyFactory.getInstance("RSA").generatePublic(clientPublicKey));
             (clientPrivateCipher = Cipher.getInstance("RSA")).init(2, KeyFactory.getInstance("RSA").generatePrivate(clientPrivateKey));
         } catch (Exception e) {
@@ -67,13 +66,11 @@ public class AnotherStarAntiCheat {
         }
     }
 
-    public byte[] encodeCPacket(String[] md5s, byte[] salt) {
+    public byte[] encodeCPacket(String[] md5s, String salt) {
         try {
-            String strSalt = new String(clientPrivateCipher.doFinal(salt));
-
             HashSet<byte[]> rsaMd5s = new HashSet<byte[]>();
             for (String md5 : md5s) {
-                rsaMd5s.add(clientPublicCipher.doFinal(md5(md5 + strSalt).getBytes()));
+                rsaMd5s.add(clientPublicCipher.doFinal(md5(md5 + salt).getBytes()));
             }
 
             ByteBuf buf = Unpooled.buffer();
@@ -85,11 +82,11 @@ public class AnotherStarAntiCheat {
         }
     }
 
-    public byte[] decodeSPacket(byte[] data) {
+    public String decodeSPacket(byte[] data) {
         try {
             ByteBuf buf = Unpooled.copiedBuffer(data);
             buf.readByte(); // packet id
-            return stcDecode(buf);
+            return new String(clientPrivateCipher.doFinal(stcDecode(buf)));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
