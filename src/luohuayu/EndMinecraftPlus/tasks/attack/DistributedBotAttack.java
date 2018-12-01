@@ -28,7 +28,7 @@ import org.spacehq.packetlib.event.session.PacketSentEvent;
 import org.spacehq.packetlib.event.session.SessionListener;
 import org.spacehq.packetlib.tcp.TcpSessionFactory;
 
-import luohuayu.ACProtocol.ACProtocol;
+import luohuayu.ACProtocol.AntiCheat3;
 import luohuayu.EndMinecraftPlus.Utils;
 import luohuayu.EndMinecraftPlus.proxy.ProxyPool;
 import luohuayu.MCForgeProtocol.MCForge;
@@ -41,7 +41,7 @@ public class DistributedBotAttack extends IAttack {
 	public List<Client> clients=new ArrayList<Client>();
 	public ExecutorService pool=Executors.newCachedThreadPool();
 	
-	private ACProtocol acp=new ACProtocol();
+	private AntiCheat3 acp=new AntiCheat3();
 	
 	private long starttime;
 	

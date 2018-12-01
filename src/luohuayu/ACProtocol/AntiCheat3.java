@@ -10,7 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-public class ACProtocol {
+public class AntiCheat3 {
 
     public byte[] getCheckData(String acFile, String code, String[] md5List) {
         try {
