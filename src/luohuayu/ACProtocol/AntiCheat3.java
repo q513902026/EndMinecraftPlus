@@ -2,6 +2,7 @@ package luohuayu.ACProtocol;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -16,7 +17,7 @@ public class AntiCheat3 {
         try {
             byte[] buf1 = code.substring(0, 30).getBytes();
 
-            FileInputStream in = new FileInputStream(acFile);
+            FileInputStream in = new FileInputStream(new File("lib", acFile));
             byte[] buf2 = new byte[in.available()];
             in.read(buf2);
 

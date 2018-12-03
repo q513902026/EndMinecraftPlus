@@ -42,8 +42,8 @@ public class DistributedBotAttack extends IAttack {
     public List<Client> clients = new ArrayList<Client>();
     public ExecutorService pool = Executors.newCachedThreadPool();
 
-    private AntiCheat3 ac3 = new AntiCheat3();
-    private AnotherStarAntiCheat asac = new AnotherStarAntiCheat();
+    private static AntiCheat3 ac3 = new AntiCheat3();
+    private static AnotherStarAntiCheat asac = new AnotherStarAntiCheat();
 
     private long starttime;
 
@@ -169,7 +169,7 @@ public class DistributedBotAttack extends IAttack {
                     switch (packet.getChannel()) {
                     case "AntiCheat3.4.3":
                         String code = ac3.uncompress(packet.getData());
-                        byte[] checkData = ac3.getCheckData("AntiCheat.jar", code,
+                        byte[] checkData = ac3.getCheckData("AntiCheat3.jar", code,
                                 new String[] { "44f6bc86a41fa0555784c255e3174260" });
                         e.getSession().send(new ClientPluginMessagePacket("AntiCheat3.4.3", checkData));
                         break;

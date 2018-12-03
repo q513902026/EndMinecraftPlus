@@ -1,8 +1,11 @@
 package luohuayu.EndMinecraftPlus;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
+import java.lang.reflect.Method;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.net.URLConnection;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -93,5 +96,16 @@ public class Utils {
             return def;
         }
         return Integer.parseInt(date);
+    }
+
+    public static void loadLibrary(File file) {
+        try {
+            URLClassLoader cl = (URLClassLoader) ClassLoader.getSystemClassLoader();
+            Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
+            method.setAccessible(true);
+            method.invoke(cl, file.toURL());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -17,10 +17,12 @@ public class Main extends Utils {
     public static int port = 25565;
 
     private static Scanner scanner = new Scanner(System.in);
+    private static Menu menu = new Menu(scanner, ip, port);
 
     public static void main(String[] args) throws InterruptedException, IOException, IllegalAccessException,
             InstantiationException, NoSuchFieldException, NoSuchMethodException, InvocationTargetException,
             ClassNotFoundException, NamingException {
+        menu.selectVersion();
         MCForgeInject.inject();
         getInfo();
         showMenu();
@@ -59,7 +61,6 @@ public class Main extends Utils {
     }
 
     private static void showMenu() throws IOException, InterruptedException {
-        Menu menu = new Menu(scanner, ip, port);
         while (true) {
             log("请输入攻击方式：", "1 : MOTD攻击", "2 : 分布式假人攻击(集群压测)");
             log("========================");

@@ -1,6 +1,9 @@
 package me.alikomi.endminecraft;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
 import luohuayu.EndMinecraftPlus.Utils;
@@ -64,6 +67,42 @@ public class Menu extends Utils {
         default:
             ProxyPool.getProxysFromAPIs();
             ProxyPool.runUpdateProxysTask(1200);
+        }
+    }
+
+    public void selectVersion() {
+        try {
+            Class.forName("javassist.CtClass");
+        } catch (ClassNotFoundException e) {
+            Utils.loadLibrary(new File("lib", "javassist-3.22.0-CR2.jar"));
+        }
+
+        try {
+            Class.forName("org.spacehq.mc.protocol.MinecraftProtocol");
+            return;
+        } catch (ClassNotFoundException e) {}
+
+        File libDir = new File("lib");
+        if (!libDir.exists()) libDir.mkdir();
+        List<File> versionLibs = new ArrayList<>();
+        for (File file : libDir.listFiles()) {
+            if (file.getName().startsWith("MC-") && file.getName().endsWith(".jar"))
+                versionLibs.add(file);
+        }
+        log("请选择Minecraft协议库版本");
+        String info = "";
+        for (int i = 0; i < versionLibs.size(); i++) {
+            String filename = versionLibs.get(i).getName();
+            info += "[" + String.valueOf(i + 1) + "]" + filename.substring("MC-".length(), filename.length() - ".jar".length()) + "  ";
+        }
+        log(info);
+        try {
+            int sel = getCo(scanner.nextLine(), 1);
+            File versionLib = versionLibs.get(sel - 1);
+            Utils.loadLibrary(versionLib);
+        } catch (Exception e) {
+            log("加载协议库发生错误!");
+            e.printStackTrace();
         }
     }
 }
