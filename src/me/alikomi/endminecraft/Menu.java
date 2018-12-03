@@ -17,10 +17,13 @@ public class Menu extends Utils {
     private Scanner scanner;
     private int port;
 
-    public Menu(Scanner sc, String ip, int port) {
+    public Menu(Scanner sc) {
+        this.scanner = sc;
+    }
+
+    public void setServer(String ip, int port) {
         this.ip = ip;
         this.port = port;
-        this.scanner = sc;
     }
 
     public void _1() {

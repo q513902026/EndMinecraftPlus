@@ -13,11 +13,8 @@ import luohuayu.EndMinecraftPlus.Utils;
 import luohuayu.MCForgeProtocol.MCForgeInject;
 
 public class Main extends Utils {
-    private static String ip;
-    public static int port = 25565;
-
     private static Scanner scanner = new Scanner(System.in);
-    private static Menu menu = new Menu(scanner, ip, port);
+    private static Menu menu = new Menu(scanner);
 
     public static void main(String[] args) throws InterruptedException, IOException, IllegalAccessException,
             InstantiationException, NoSuchFieldException, NoSuchMethodException, InvocationTargetException,
@@ -29,6 +26,9 @@ public class Main extends Utils {
     }
 
     private static void getInfo() throws NamingException {
+        String ip;
+        int port = 25565;
+
         log("欢迎使用EndMinecraft压测程序", "", "=======================");
         log("请输入ip地址");
         ip = scanner.nextLine();
@@ -56,8 +56,8 @@ public class Main extends Utils {
                 port = Integer.parseInt(re[2]);
                 log("port: " + port);
             }
-        } catch (Exception e) {
-        }
+        } catch (Exception e) {}
+        menu.setServer(ip, port);
     }
 
     private static void showMenu() throws IOException, InterruptedException {

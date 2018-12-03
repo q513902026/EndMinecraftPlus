@@ -196,11 +196,7 @@ public class DistributedBotAttack extends IAttack {
 
             public void disconnected(DisconnectedEvent e) {
                 String msg;
-                if (e.getCause() != null) {
-                    msg = e.getCause().getMessage();
-                } else {
-                    msg = e.getReason();
-                }
+                msg = e.getCause() != null ? e.getCause().toString() : e.getReason();
                 Utils.log("Client", "[断开][" + username + "] " + msg);
             }
         });
