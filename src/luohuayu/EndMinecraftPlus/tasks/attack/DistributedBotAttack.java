@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -48,7 +49,7 @@ public class DistributedBotAttack extends IAttack {
     private long starttime;
 
     public DistributedBotAttack(int time, int maxconnect, int joinsleep, boolean motdbefore, boolean tab,
-            HashMap<String, String> modList) {
+            Map<String, String> modList) {
         super(time, maxconnect, joinsleep, motdbefore, tab, modList);
     }
 
