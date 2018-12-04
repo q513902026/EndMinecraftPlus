@@ -2,8 +2,10 @@ package me.alikomi.endminecraft;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import luohuayu.EndMinecraftPlus.Utils;
@@ -11,6 +13,7 @@ import luohuayu.EndMinecraftPlus.proxy.ProxyPool;
 import luohuayu.EndMinecraftPlus.tasks.attack.DistributedBotAttack;
 import luohuayu.EndMinecraftPlus.tasks.attack.IAttack;
 import luohuayu.EndMinecraftPlus.tasks.attack.MotdAttack;
+import luohuayu.MCForgeProtocol.MCForgeMOTD;
 
 public class Menu extends Utils {
     private String ip;
@@ -48,7 +51,10 @@ public class Menu extends Utils {
         log("请输入是否开启操死乐乐模式 y/n，默认关闭(n)");
         boolean lele = getCo(scanner.nextLine(), "n").equals("y");
         getProxy();
-        IAttack attack = new DistributedBotAttack(time, maxAttack, sleepTime, lele, tab, new HashMap<String, String>());
+        log("正在获取MOD列表..");
+        Map<String, String> modList = new MCForgeMOTD().pingGetModsList("127.0.0.1", 25565, 4);
+        log("MOD列表: ", Arrays.toString(modList.keySet().toArray()));
+        IAttack attack = new DistributedBotAttack(time, maxAttack, sleepTime, lele, tab, modList);
         attack.start(ip, port);
     }
 
