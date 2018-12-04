@@ -3,6 +3,7 @@ package me.alikomi.endminecraft;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,6 +99,9 @@ public class Menu extends Utils {
             if (file.getName().startsWith("MC-") && file.getName().endsWith(".jar"))
                 versionLibs.add(file);
         }
+
+        Collections.sort(versionLibs);
+
         log("请选择Minecraft协议库版本");
         String info = "";
         for (int i = 0; i < versionLibs.size(); i++) {
