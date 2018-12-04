@@ -52,7 +52,7 @@ public class Menu extends Utils {
         boolean lele = getCo(scanner.nextLine(), "n").equals("y");
         getProxy();
         log("正在获取MOD列表..");
-        Map<String, String> modList = new MCForgeMOTD().pingGetModsList("127.0.0.1", 25565, 4);
+        Map<String, String> modList = new MCForgeMOTD().pingGetModsList(ip, port, 4);
         log("MOD列表: ", Arrays.toString(modList.keySet().toArray()));
         IAttack attack = new DistributedBotAttack(time, maxAttack, sleepTime, lele, tab, modList);
         attack.start(ip, port);
