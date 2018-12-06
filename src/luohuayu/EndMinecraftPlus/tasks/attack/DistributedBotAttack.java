@@ -176,7 +176,7 @@ public class DistributedBotAttack extends IAttack {
                         break;
                     case "anotherstaranticheat":
                         String salt = asac.decodeSPacket(packet.getData());
-                        byte[] data = asac.encodeCPacket(new String[] {}, salt);
+                        byte[] data = asac.encodeCPacket(new String[] {"4863f8708f0c24517bb5d108d45f3e15"}, salt);
                         e.getSession().send(new ClientPluginMessagePacket("anotherstaranticheat", data));
                     default:
                     }
