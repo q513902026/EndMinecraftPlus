@@ -51,13 +51,16 @@ public class MCForge {
     public void handle(ServerPluginMessagePacket packet) {
         switch (packet.getChannel()) {
         case "FML|HS":
+        case "fml:hs": // 1.13
             this.handshake.handle(packet);
             break;
         case "REGISTER":
-            this.session.send(new ClientPluginMessagePacket("REGISTER", packet.getData()));
+        case "minecraft:register": // 1.13
+            this.session.send(new ClientPluginMessagePacket(packet.getChannel(), packet.getData()));
             break;
         case "MC|Brand":
-            this.session.send(new ClientPluginMessagePacket("MC|Brand", "fml,forge".getBytes()));
+        case "minecraft:brand": // 1.13
+            this.session.send(new ClientPluginMessagePacket(packet.getChannel(), "fml,forge".getBytes()));
             break;
         }
     }
