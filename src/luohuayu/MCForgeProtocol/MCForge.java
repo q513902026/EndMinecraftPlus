@@ -81,15 +81,30 @@ public class MCForge {
     public static boolean isVersion1710() {
         try {
             Class<?> cls = Class.forName("org.spacehq.mc.protocol.ProtocolConstants");
-            if (cls != null) {
-                Field field = cls.getDeclaredField("PROTOCOL_VERSION");
-                int protocol = field.getInt(cls.newInstance());
-                return (protocol == 5);
-            } else {
-                return false;
-            }
+            Field field = cls.getDeclaredField("PROTOCOL_VERSION");
+            int protocol = field.getInt(null);
+            return (protocol == 5);
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    public static int getProtocolVersion() {
+        if (isVersion1710()) return 5;
+        try {
+            Class<?> cls;
+            try {
+                cls = Class.forName("org.spacehq.mc.protocol.ProtocolConstants");
+            } catch (ClassNotFoundException e) {
+                cls = Class.forName("org.spacehq.mc.protocol.MinecraftConstants");
+            }
+
+            Field field = cls.getDeclaredField("PROTOCOL_VERSION");
+            int protocol = field.getInt(null);
+            return protocol;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
         }
     }
 }

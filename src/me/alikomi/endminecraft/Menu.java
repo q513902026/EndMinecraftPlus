@@ -14,6 +14,7 @@ import luohuayu.EndMinecraftPlus.proxy.ProxyPool;
 import luohuayu.EndMinecraftPlus.tasks.attack.DistributedBotAttack;
 import luohuayu.EndMinecraftPlus.tasks.attack.IAttack;
 import luohuayu.EndMinecraftPlus.tasks.attack.MotdAttack;
+import luohuayu.MCForgeProtocol.MCForge;
 import luohuayu.MCForgeProtocol.MCForgeMOTD;
 
 public class Menu extends Utils {
@@ -53,7 +54,7 @@ public class Menu extends Utils {
         boolean lele = getCo(scanner.nextLine(), "n").equals("y");
         getProxy();
         log("正在获取MOD列表..");
-        Map<String, String> modList = new MCForgeMOTD().pingGetModsList(ip, port, 4);
+        Map<String, String> modList = new MCForgeMOTD().pingGetModsList(ip, port, MCForge.getProtocolVersion());
         log("MOD列表: " + Arrays.toString(modList.keySet().toArray()));
         IAttack attack = new DistributedBotAttack(time, maxAttack, sleepTime, lele, tab, modList);
         attack.start(ip, port);
