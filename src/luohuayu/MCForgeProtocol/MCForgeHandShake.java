@@ -22,7 +22,7 @@ public class MCForgeHandShake {
 
         switch (packetID) {
         case 0: // Hello
-            sendPluginMessage(session, "FML|HS", new byte[] { 0x01, 0x02 });
+            sendPluginMessage(session, packet.getChannel(), new byte[] { 0x01, 0x02 });
 
             // ModList
             ByteArrayOutputStream buf = new ByteArrayOutputStream();
@@ -41,22 +41,22 @@ public class MCForgeHandShake {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            sendPluginMessage(session, "FML|HS", buf.toByteArray());
+            sendPluginMessage(session, packet.getChannel(), buf.toByteArray());
             break;
         case 2: // ModList
-            sendPluginMessage(session, "FML|HS", new byte[] { -0x1, 0x02 }); // ACK(WAITING SERVER DATA)
+            sendPluginMessage(session, packet.getChannel(), new byte[] { -0x1, 0x02 }); // ACK(WAITING SERVER DATA)
             break;
         case 3: // RegistryData
-            sendPluginMessage(session, "FML|HS", new byte[] { -0x1, 0x03 }); // ACK(WAITING SERVER COMPLETE)
+            sendPluginMessage(session, packet.getChannel(), new byte[] { -0x1, 0x03 }); // ACK(WAITING SERVER COMPLETE)
             break;
         case -1: // HandshakeAck
             int ackID = data[1];
             switch (ackID) {
             case 2: // WAITING CACK
-                sendPluginMessage(session, "FML|HS", new byte[] { -0x1, 0x04 }); // PENDING COMPLETE
+                sendPluginMessage(session, packet.getChannel(), new byte[] { -0x1, 0x04 }); // PENDING COMPLETE
                 break;
             case 3: // COMPLETE
-                sendPluginMessage(session, "FML|HS", new byte[] { -0x1, 0x05 }); // COMPLETE
+                sendPluginMessage(session, packet.getChannel(), new byte[] { -0x1, 0x05 }); // COMPLETE
                 break;
             default:
             }
