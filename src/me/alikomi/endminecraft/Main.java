@@ -62,7 +62,7 @@ public class Main extends Utils {
 
     private static void showMenu() throws IOException, InterruptedException {
         while (true) {
-            log("请输入攻击方式：", "1 : MOTD攻击", "2 : 分布式假人攻击(集群压测)");
+            log("请输入攻击方式：", "1 : 本地MOTD攻击", "2 : 分布式假人攻击","3 : 分布式MOTD攻击");
             log("========================");
             switch (getCo(scanner.nextLine(), 2)) {
             case 1:
@@ -70,6 +70,9 @@ public class Main extends Utils {
                 return;
             case 2:
                 menu._2();
+                return;
+            case 3:
+                menu._3();
                 return;
             default:
                 log("您的选择有误，请重新选择");
