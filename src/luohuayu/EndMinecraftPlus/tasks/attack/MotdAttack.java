@@ -46,7 +46,6 @@ public class MotdAttack extends IAttack {
                     }
                 } catch (Throwable e) {
                     Utils.log("Motd/" + Thread.currentThread().getName(), e.getMessage());
-                    e.printStackTrace();
                 }
             }
         };
