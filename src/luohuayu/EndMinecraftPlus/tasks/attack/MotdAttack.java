@@ -44,7 +44,7 @@ public class MotdAttack extends IAttack {
                         Utils.log("Motd/" + Thread.currentThread().getName(), "已断开");
                         Utils.sleep(1000);
                     }
-                } catch (Exception e) {
+                } catch (Throwable e) {
                     Utils.log("Motd/" + Thread.currentThread().getName(), e.getMessage());
                     e.printStackTrace();
                 }
