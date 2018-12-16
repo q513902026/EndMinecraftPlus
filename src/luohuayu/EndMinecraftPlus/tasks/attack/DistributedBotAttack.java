@@ -199,6 +199,11 @@ public class DistributedBotAttack extends IAttack {
                         String salt = asac.decodeSPacket(packet.getData());
                         byte[] data = asac.encodeCPacket(new String[] {"4863f8708f0c24517bb5d108d45f3e15"}, salt);
                         e.getSession().send(new ClientPluginMessagePacket("anotherstaranticheat", data));
+                        break;
+                    case "VexView":
+                        if (new String(packet.getData()).equals("GET:Verification"))
+                            e.getSession().send(new ClientPluginMessagePacket("VexView", "Verification:1.8.10".getBytes()));
+                        break;
                     default:
                     }
                 } else if (e.getPacket() instanceof ServerJoinGamePacket) {
