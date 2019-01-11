@@ -17,19 +17,19 @@
     </plugins>
   </build>
   <dependencies>
-  	<dependency>
-  		<groupId>javassist</groupId>
-  		<artifactId>javassist</artifactId>
+      <dependency>
+          <groupId>javassist</groupId>
+          <artifactId>javassist</artifactId>
         <scope>system</scope>  
-  		<systemPath>${project.basedir}/lib/javassist-3.22.0-CR2.jar</systemPath>
-  		<version>3.22.0-CR2</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>MCProtocolLib</groupId>
-  		<artifactId>MCProtocolLib</artifactId>
-  		<version>1.12.2</version>
-  		<scope>system</scope>
-  		<systemPath>${project.basedir}/lib/MC-1.12.2.jar</systemPath>
-  	</dependency>
+          <systemPath>${project.basedir}/lib/javassist-3.22.0-CR2.jar</systemPath>
+          <version>3.22.0-CR2</version>
+      </dependency>
+      <dependency>
+          <groupId>MCProtocolLib</groupId>
+          <artifactId>MCProtocolLib</artifactId>
+          <version>1.12.2</version>
+          <scope>system</scope>
+          <systemPath>${project.basedir}/lib/MC-1.12.2.jar</systemPath>
+      </dependency>
   </dependencies>
 </project>
