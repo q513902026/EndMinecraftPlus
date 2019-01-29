@@ -14,12 +14,17 @@ import java.util.concurrent.Executors;
 import io.netty.util.internal.ConcurrentSet;
 import org.spacehq.mc.protocol.MinecraftProtocol;
 import org.spacehq.mc.protocol.packet.ingame.client.ClientChatPacket;
+import org.spacehq.mc.protocol.packet.ingame.client.ClientKeepAlivePacket;
 import org.spacehq.mc.protocol.packet.ingame.client.ClientPluginMessagePacket;
 import org.spacehq.mc.protocol.packet.ingame.client.ClientTabCompletePacket;
+import org.spacehq.mc.protocol.packet.ingame.client.player.ClientPlayerChangeHeldItemPacket;
 import org.spacehq.mc.protocol.packet.ingame.client.player.ClientPlayerMovementPacket;
+import org.spacehq.mc.protocol.packet.ingame.client.world.ClientTeleportConfirmPacket;
 import org.spacehq.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
 import org.spacehq.mc.protocol.packet.ingame.server.ServerPluginMessagePacket;
+import org.spacehq.mc.protocol.packet.ingame.server.entity.ServerEntityTeleportPacket;
 import org.spacehq.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
+import org.spacehq.mc.protocol.packet.ingame.server.window.ServerSetSlotPacket;
 import org.spacehq.packetlib.Client;
 import org.spacehq.packetlib.Session;
 import org.spacehq.packetlib.event.session.ConnectedEvent;
@@ -191,11 +196,12 @@ public class DistributedBotAttack extends IAttack {
                     e.getSession().setFlag("join", true);
                     Utils.log("Client", "[连接成功][" + username + "]");
                     MultiVersionPacket.sendClinetSettingPacket(e.getSession(), "zh_CN");
+                    e.getSession().send(new ClientPlayerChangeHeldItemPacket(1));
                 } else if (e.getPacket() instanceof ServerPlayerPositionRotationPacket) {
                     ServerPlayerPositionRotationPacket packet = e.getPacket();
                     MultiVersionPacket.sendPosPacket(e.getSession(), packet.getX(), packet.getY(), packet.getZ(), packet.getYaw(), packet.getYaw());
                     e.getSession().send(new ClientPlayerMovementPacket(true));
-
+                    e.getSession().send(new ClientTeleportConfirmPacket(packet.getTeleportId()));
                 }
             }
 
