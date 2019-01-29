@@ -5,6 +5,7 @@ import org.spacehq.mc.protocol.packet.ingame.client.ClientTabCompletePacket;
 import org.spacehq.mc.protocol.packet.ingame.client.player.ClientPlayerPositionRotationPacket;
 import org.spacehq.packetlib.Session;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
@@ -45,11 +46,15 @@ public class MultiVersionPacket {
             ClientSettingsPacket packet;
             try {
                 Class<?> parm1Class = Class.forName("org.spacehq.mc.protocol.data.game.setting.ChatVisibility");
-                Class<?> parm2Class = Class.forName("[org.spacehq.mc.protocol.data.game.setting.SkinPart");
+                Class<?> parm2Class = Class.forName("[Lorg.spacehq.mc.protocol.data.game.setting.SkinPart;");
                 Class<?> parm3Class = Class.forName("org.spacehq.mc.protocol.data.game.entity.player.Hand");
 
+                Class<?> skinClass = Class.forName("org.spacehq.mc.protocol.data.game.setting.SkinPart");
+                Object[] arrSkin = (Object[]) Array.newInstance(skinClass, 1);
+                Array.set(arrSkin, 0, skinClass.getEnumConstants()[0]);
+
                 constructor = cls.getConstructor(String.class, int.class, parm1Class, boolean.class, parm2Class, parm3Class);
-                packet = (ClientSettingsPacket) constructor.newInstance(locale, 10, parm1Class.getEnumConstants(), true, new Object[] {parm2Class.getEnumConstants()[0]}, parm3Class.getEnumConstants()[0]);
+                packet = (ClientSettingsPacket) constructor.newInstance(locale, 10, parm1Class.getEnumConstants()[0], true, arrSkin, parm3Class.getEnumConstants()[0]);
             } catch (NoSuchMethodException ex) {
                 Class<?> parm1Class = Class.forName("org.spacehq.mc.protocol.packet.ingame.client.ClientSettingsPacket.ChatVisibility");
                 Class<?> parm2Class = Class.forName("org.spacehq.mc.protocol.packet.ingame.client.ClientSettingsPacket.Difficulty");
@@ -58,8 +63,6 @@ public class MultiVersionPacket {
                 packet = (ClientSettingsPacket) constructor.newInstance(locale, 10, parm1Class.getEnumConstants()[0], true, parm2Class.getEnumConstants()[0], true);
             }
             session.send(packet);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) {}
     }
 }
