@@ -195,7 +195,7 @@ public class DistributedBotAttack extends IAttack {
                 } else if (e.getPacket() instanceof ServerJoinGamePacket) {
                     e.getSession().setFlag("join", true);
                     Utils.log("Client", "[连接成功][" + username + "]");
-                    MultiVersionPacket.sendClinetSettingPacket(e.getSession(), "zh_CN");
+                    MultiVersionPacket.sendClientSettingPacket(e.getSession(), "zh_CN");
                     e.getSession().send(new ClientPlayerChangeHeldItemPacket(1));
                 } else if (e.getPacket() instanceof ServerPlayerPositionRotationPacket) {
                     ServerPlayerPositionRotationPacket packet = e.getPacket();

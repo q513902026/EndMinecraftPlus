@@ -39,7 +39,7 @@ public class MultiVersionPacket {
         } catch (Exception e) {}
     }
 
-    public static void sendClinetSettingPacket(Session session, String locale) {
+    public static void sendClientSettingPacket(Session session, String locale) {
         try {
             Class<?> cls = ClientSettingsPacket.class;
             Constructor<?> constructor;
