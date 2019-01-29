@@ -49,7 +49,7 @@ public class MultiVersionPacket {
                 Class<?> parm3Class = Class.forName("org.spacehq.mc.protocol.data.game.entity.player.Hand");
 
                 constructor = cls.getConstructor(String.class, int.class, parm1Class, boolean.class, parm2Class, parm3Class);
-                packet = (ClientSettingsPacket) constructor.newInstance(locale, 10, parm1Class.getEnumConstants()[0], true, parm2Class.getEnumConstants()[0], parm3Class.getEnumConstants()[0]);
+                packet = (ClientSettingsPacket) constructor.newInstance(locale, 10, parm1Class.getEnumConstants(), true, new Object[] {parm2Class.getEnumConstants()[0]}, parm3Class.getEnumConstants()[0]);
             } catch (NoSuchMethodException ex) {
                 Class<?> parm1Class = Class.forName("org.spacehq.mc.protocol.packet.ingame.client.ClientSettingsPacket.ChatVisibility");
                 Class<?> parm2Class = Class.forName("org.spacehq.mc.protocol.packet.ingame.client.ClientSettingsPacket.Difficulty");
@@ -58,6 +58,8 @@ public class MultiVersionPacket {
                 packet = (ClientSettingsPacket) constructor.newInstance(locale, 10, parm1Class.getEnumConstants()[0], true, parm2Class.getEnumConstants()[0], true);
             }
             session.send(packet);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
