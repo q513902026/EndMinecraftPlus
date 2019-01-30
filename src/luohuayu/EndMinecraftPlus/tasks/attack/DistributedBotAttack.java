@@ -33,6 +33,7 @@ import org.spacehq.packetlib.event.session.DisconnectingEvent;
 import org.spacehq.packetlib.event.session.PacketReceivedEvent;
 import org.spacehq.packetlib.event.session.PacketSentEvent;
 import org.spacehq.packetlib.event.session.SessionListener;
+import org.spacehq.packetlib.packet.Packet;
 import org.spacehq.packetlib.tcp.TcpSessionFactory;
 
 import luohuayu.ACProtocol.AnotherStarAntiCheat;
@@ -181,37 +182,7 @@ public class DistributedBotAttack extends IAttack {
         new MCForge(client.getSession(), this.modList).init();
         client.getSession().addListener(new SessionListener() {
             public void packetReceived(PacketReceivedEvent e) {
-                if (e.getPacket() instanceof ServerPluginMessagePacket) {
-                    ServerPluginMessagePacket packet = e.getPacket();
-                    switch (packet.getChannel()) {
-                        case "AntiCheat3.4.3":
-                            String code = ac3.uncompress(packet.getData());
-                            byte[] checkData = ac3.getCheckData("AntiCheat3.jar", code,
-                                    new String[]{"44f6bc86a41fa0555784c255e3174260"});
-                            e.getSession().send(new ClientPluginMessagePacket("AntiCheat3.4.3", checkData));
-                            break;
-                        case "anotherstaranticheat":
-                            String salt = asac.decodeSPacket(packet.getData());
-                            byte[] data = asac.encodeCPacket(new String[]{"4863f8708f0c24517bb5d108d45f3e15"}, salt);
-                            e.getSession().send(new ClientPluginMessagePacket("anotherstaranticheat", data));
-                            break;
-                        case "VexView":
-                            if (new String(packet.getData()).equals("GET:Verification"))
-                                e.getSession().send(new ClientPluginMessagePacket("VexView", "Verification:1.8.10".getBytes()));
-                            break;
-                        default:
-                    }
-                } else if (e.getPacket() instanceof ServerJoinGamePacket) {
-                    e.getSession().setFlag("join", true);
-                    Utils.log("Client", "[连接成功][" + username + "]");
-                    MultiVersionPacket.sendClientSettingPacket(e.getSession(), "zh_CN");
-                    e.getSession().send(new ClientPlayerChangeHeldItemPacket(1));
-                } else if (e.getPacket() instanceof ServerPlayerPositionRotationPacket) {
-                    ServerPlayerPositionRotationPacket packet = e.getPacket();
-                    MultiVersionPacket.sendPosPacket(e.getSession(), packet.getX(), packet.getY(), packet.getZ(), packet.getYaw(), packet.getYaw());
-                    e.getSession().send(new ClientPlayerMovementPacket(true));
-                    e.getSession().send(new ClientTeleportConfirmPacket(packet.getTeleportId()));
-                }
+                handlePacket(e.getSession(), e.getPacket(), username);
             }
 
             public void packetSent(PacketSentEvent e) {
@@ -257,5 +228,39 @@ public class DistributedBotAttack extends IAttack {
         } catch (Exception e) {
         }
         return false;
+    }
+
+    protected void handlePacket(Session session, Packet recvPacket, String username) {
+        if (recvPacket instanceof ServerPluginMessagePacket) {
+            ServerPluginMessagePacket packet = (ServerPluginMessagePacket) recvPacket;
+            switch (packet.getChannel()) {
+                case "AntiCheat3.4.3":
+                    String code = ac3.uncompress(packet.getData());
+                    byte[] checkData = ac3.getCheckData("AntiCheat3.jar", code,
+                            new String[]{"44f6bc86a41fa0555784c255e3174260"});
+                    session.send(new ClientPluginMessagePacket("AntiCheat3.4.3", checkData));
+                    break;
+                case "anotherstaranticheat":
+                    String salt = asac.decodeSPacket(packet.getData());
+                    byte[] data = asac.encodeCPacket(new String[]{"4863f8708f0c24517bb5d108d45f3e15"}, salt);
+                    session.send(new ClientPluginMessagePacket("anotherstaranticheat", data));
+                    break;
+                case "VexView":
+                    if (new String(packet.getData()).equals("GET:Verification"))
+                        session.send(new ClientPluginMessagePacket("VexView", "Verification:1.8.10".getBytes()));
+                    break;
+                default:
+            }
+        } else if (recvPacket instanceof ServerJoinGamePacket) {
+            session.setFlag("join", true);
+            Utils.log("Client", "[连接成功][" + username + "]");
+            MultiVersionPacket.sendClientSettingPacket(session, "zh_CN");
+            session.send(new ClientPlayerChangeHeldItemPacket(1));
+        } else if (recvPacket instanceof ServerPlayerPositionRotationPacket) {
+            ServerPlayerPositionRotationPacket packet = (ServerPlayerPositionRotationPacket) recvPacket;
+            MultiVersionPacket.sendPosPacket(session, packet.getX(), packet.getY(), packet.getZ(), packet.getYaw(), packet.getYaw());
+            session.send(new ClientPlayerMovementPacket(true));
+            session.send(new ClientTeleportConfirmPacket(packet.getTeleportId()));
+        }
     }
 }
