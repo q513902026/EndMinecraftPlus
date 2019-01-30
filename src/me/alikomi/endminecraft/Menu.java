@@ -37,8 +37,8 @@ public class Menu extends Utils {
         int time = getCo(scanner.nextLine(), 60);
         log("请输入线程数(10)");
         int thread = getCo(scanner.nextLine(), 16);
-        IAttack attack = new MotdAttack(time, thread, 0, false, false, null);
-        attack.start(ip, port);
+        IAttack attack = new MotdAttack(ip, port, time, thread, 0);
+        attack.start();
     }
 
     public void _2() {
@@ -56,8 +56,9 @@ public class Menu extends Utils {
         log("正在获取MOD列表..");
         Map<String, String> modList = new MCForgeMOTD().pingGetModsList(ip, port, MCForge.getProtocolVersion());
         log("MOD列表: " + Arrays.toString(modList.keySet().toArray()));
-        IAttack attack = new DistributedBotAttack(time, maxAttack, sleepTime, lele, tab, modList);
-        attack.start(ip, port);
+        DistributedBotAttack attack = new DistributedBotAttack(ip, port, time, maxAttack, sleepTime);
+        attack.setBotConfig(lele, tab, modList);
+        attack.start();
     }
 
     public void _3() {
@@ -67,8 +68,8 @@ public class Menu extends Utils {
         log("请输入线程数(10)");
         int thread = getCo(scanner.nextLine(), 16);
         getProxy();
-        IAttack attack = new DistributedMotdAttack(time, thread, 0, false, false, null);
-        attack.start(ip, port);
+        IAttack attack = new DistributedMotdAttack(ip, port, time, thread, 0);
+        attack.start();
     }
 
     public void getProxy() {

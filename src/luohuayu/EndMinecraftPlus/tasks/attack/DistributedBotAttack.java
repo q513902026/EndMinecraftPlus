@@ -42,6 +42,10 @@ import luohuayu.EndMinecraftPlus.proxy.ProxyPool;
 import luohuayu.MCForgeProtocol.MCForge;
 
 public class DistributedBotAttack extends IAttack {
+    protected boolean attack_motdbefore;
+    protected boolean attack_tab;
+    protected Map<String, String> modList;
+
     private Thread mainThread;
     private Thread tabThread;
     private Thread taskThread;
@@ -54,12 +58,17 @@ public class DistributedBotAttack extends IAttack {
 
     private long starttime;
 
-    public DistributedBotAttack(int time, int maxconnect, int joinsleep, boolean motdbefore, boolean tab,
-                                Map<String, String> modList) {
-        super(time, maxconnect, joinsleep, motdbefore, tab, modList);
+    public DistributedBotAttack(String ip, int port, int time, int maxconnect, int joinsleep) {
+        super(ip, port, time, maxconnect, joinsleep);
     }
 
-    public void start(final String ip, final int port) {
+    public void setBotConfig(boolean motdbefore, boolean tab, Map<String, String> modList) {
+        this.attack_motdbefore = motdbefore;
+        this.attack_tab = tab;
+        this.modList = modList;
+    }
+
+    public void start() {
         setTask(() -> {
             while (true) {
                 for (Client c : clients) {

@@ -15,12 +15,11 @@ import luohuayu.EndMinecraftPlus.proxy.ProxyPool;
 public class DistributedMotdAttack extends IAttack {
     public List<Thread> threads = new ArrayList<Thread>();
 
-    public DistributedMotdAttack(int time, int maxconnect, int joinsleep, boolean motdbefore, boolean tab,
-                                 HashMap<String, String> modList) {
-        super(time, maxconnect, joinsleep, motdbefore, tab, modList);
+    public DistributedMotdAttack(String ip, int port, int time, int maxconnect, int joinsleep) {
+        super(ip, port, time, maxconnect, joinsleep);
     }
 
-    public void start(String ip, int port) {
+    public void start() {
         for (String p : ProxyPool.proxys) {
             try {
                 String[] _p = p.split(":");
